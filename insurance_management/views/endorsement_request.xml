@@ -11,6 +11,7 @@
                 <field name="partner_id"/>
                 <field name="insurance_company_id"/>
                 <field name="policy_no"/>
+                <field name="activity_ids" string="Next Activity" widget="list_activity" optional="show"/>
                 <field name="insurance_type_id"/>
                 <field name="insurance_sub_type_id"/>
                 <field name="state" widget="badge" decoration-success="state == 'validate'" decoration-info="state not in ('validate', 'cancel', 'draft')" decoration-muted="state == 'draft'"/>
@@ -54,7 +55,7 @@
         <field name="arch" type="xml">
             <form string="Endorsement Request">
                 <header>
-                    <field name="state" widget="statusbar" clickable="1" statusbar_visible="draft,review,sent_to_insurance,sent_to_customer,validate"/>
+                    <field name="state" widget="statusbar" clickable="1" statusbar_visible="draft,review,sent_to_insurance,sent_to_customer,validate,cancel"/>
                     <button name="action_create_endorsement_policy" states='sent_to_customer' type="object" string="Create Endorsement" class="oe_highlight"/>
                 </header>
                 <sheet>

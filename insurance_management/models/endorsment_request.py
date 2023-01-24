@@ -25,11 +25,11 @@ class endorsement_request(models.Model):
                                    string="Transaction Type", tracking=True)
     partner_id = fields.Many2one('res.partner', string='Customer')
     insurance_company_id = fields.Many2one('insurance.company',string='Insurance Company')
-    policy_no = fields.Char("Policy No")
+    policy_no = fields.Char("Policy Internal reference")
     insurance_type_id = fields.Many2one('insurance.type', string='Insurance Type')
     insurance_sub_type_id = fields.Many2one('insurance.sub.type', string='Insurance Sub Type',
                                             domain="[('insurance_type_id','=',insurance_type_id)]")
-    prev_policy = fields.Many2one('insurance.policy', string="Policy", required='1')
+    prev_policy = fields.Many2one('insurance.policy', string="Policy No.", required='1')
     state = fields.Selection([('draft', 'Draft'),
                               ('review', 'Review'),
                               ('sent_to_insurance', 'Sent to Vendor'),
@@ -102,7 +102,7 @@ class endorsement_request(models.Model):
         self.insurance_company_id = self.prev_policy.insurance_company_id.id
         self.insurance_sub_type_id = self.prev_policy.insurance_sub_type_id.id
         self.insurance_type_id = self.prev_policy.insurance_type_id.id
-        self.policy_no = self.prev_policy.policy_no
+        self.policy_no = self.prev_policy.policy_id_i
         # for benefits in self.prev_policy.benefits_custome_ids:
         #     vals = {
         #         # 'policy_id': policy.id,

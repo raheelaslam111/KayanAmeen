@@ -50,7 +50,7 @@ class Vehicle(models.Model):
     vat = fields.Float(string='VAT', default=15)
     total = fields.Float(string='Total',store=True, compute='_get_q_line_total')
     endorsment_am = fields.Float("Endorsement Amount")
-    endorsment_type = fields.Selection([('add', 'Upgrade'), ('sub', 'Downgrade'), ('remove', 'Cancel')],
+    endorsment_type = fields.Selection([('add', 'Upgrade'), ('sub', 'Downgrade'), ('remove', 'Deletion'),('amend','Amendement')],
                                        string='Operation Type')
     personal_accedant = fields.Boolean(string='Personal Accedant')
     is_driver = fields.Boolean(string='Driver')
