@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="zero_full_page_payment_voucher">
+	<t t-call="web.html_container">
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+			<div class="page" style=" min-width:100%"><br/>
+				<div style=" background-color: #696969; color:#fff !important; font:25px lucida-console,sans-serif !important;font-weight: bold;">
+					<t t-if="o.partner_type == 'customer'">
+					    <strong>
+							<div name="payment_recipr" style="border: 2px solid black;">
+								<center> Payment Receipt </center>
+							</div> 
+						</strong>
+					</t>
+					<t t-else="">
+						<strong>
+							<div name="payment_voucher" style="border: 1px solid black;">
+								<center> Payment Voucher </center>
+							</div>
+						</strong>
+					</t>
+				</div><br/><br/>
+				<div>
+					<t t-if="o.partner_type == 'customer'">
+						<strong>
+							<div name="recipt_no">
+								<strong style="font-weight: bold; font-size: 22px;"> Receipt No. : </strong>
+								<span style="font-weight: bold; font-size: 22px;" t-esc="o.name"/>
+							</div> 
+						</strong>
+					</t>
+					<t t-else="">
+						<strong>
+							<div name="voucher_no" >
+								<strong style="font-weight: bold; font-size: 22px;"> Voucher No. : </strong>
+								<span style="font-weight: bold; font-size: 22px;" t-esc="o.name"/>
+							</div>
+						</strong>
+					</t>
+				</div><br/>
+				<div class="row mt32 mb32">
+					<div class="col-auto mw-500 mb-4" style = "width : 35%">
+						<strong >Payment Amount :</strong>
+						<span style="font-weight: bold;" t-esc="o.amount"/>
+						<span style="font-weight: bold;" t-esc="o.partner_id.company_id.currency_id.symbol"/>
+					</div>
+					<div class="col-auto mw-500 mb-4" style = "width : 33%">
+					</div>
+					<div class="col-auto mw-500 mb-4" style = "width : 31%">
+						<strong >Payment Date :</strong>
+						<span style="font-weight: bold;" t-esc="o.payment_date"/>
+					</div>
+				</div>
+
+				<table t-if="o.partner_type == 'customer'" style="width: 713px; height: 40px;" cellpadding="12">
+					<tbody>
+						<tr >
+							<td style="width: 130px;"> Received from</td>
+							<td style="width: 555px; border-bottom: 1px dashed #000; padding-top: 15px; padding-left: 10px;"> 
+								<span t-esc="o.partner_id.name" > </span> 
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<table t-else="" style="width: 713px; height: 40px;" cellpadding="12">
+					<tbody>
+						<tr>
+							<td style="width: 130px;"> Paid to </td>
+							<td style="width: 555px; border-bottom: 1px dashed #000; padding-top: 15px; padding-left: 10px;"> 
+								<span t-esc="o.partner_id.name" > </span> 
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table style="width: 713px; height: 40px;" cellpadding="12">
+					<tbody>
+						<tr>
+							<td style="width: 130px;"> The sum of </td>
+							<td style="width: 555px; border-bottom: 1px dashed #000; padding-top: 15px; padding-left: 10px;"> 
+								<span t-esc="o.words_amount" > </span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table style="width: 713px; height: 40px;" cellpadding="12">
+					<tbody>
+						<tr>
+							<td style="width: 130px;"> Journal </td>
+							<td style="width: 555px; border-bottom: 1px dashed #000; padding-top: 15px; padding-left: 10px;"> <span t-esc="o.journal_id.name" > </span> </td>
+						</tr>
+					</tbody>
+				</table>
+
+				<table style="width: 713px; height: 40px;" cellpadding="12">
+					<tbody>
+						<tr>
+							<td style="width: 130px;"> Lable </td>
+							<td style="width: 555px; border-bottom: 1px dashed #000; padding-top: 15px; padding-left: 10px;"> <span t-esc="o.communication" > </span> &#160; </td>
+						</tr>
+					</tbody>
+				</table>
+				<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+				<footer>
+					<div class="row mt32 mb32">
+						<div class="col-auto mw-500 mb-4" style = "width : 10%"> </div>
+						<div class="col-auto mw-500 mb-4" style = "width : 27%">
+							<strong >&#160;<span t-esc="o.create_uid.name"></span> </strong><br/>
+							<strong style = "border-top: 1.5px dashed #000;"> &#160; Accountant &#160; </strong>
+						</div>
+						<div class="col-auto mw-110 mb-4"  style = "width : 27%">
+							<strong >  </strong><br/>
+							<strong style = "border-top: 1.5px dashed #000;"> &#160;&#160;Paid Manager</strong>
+						</div>
+						<div class="col-auto mw-100 mb-4"  style = "width : 27%">
+							<strong >  </strong><br/>
+							<strong style = "border-top: 1.5px dashed #000;"> Receiver's Signature</strong>
+						</div>
+						<div class="col-auto mw-500 mb-4" style = "width : 11%"> </div>
+					</div>
+				</footer>
+			</div>
+		</t>
+	</t>
+	</template>
+
+	<template id="full_page_payment_report">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="o">
+				<t t-call="print_voucher_half_full_page.zero_full_page_payment_voucher"/>
+			</t>
+		</t>
+	</template>
+
+	<record id="full_page_payment_report_paperformat" model="report.paperformat">
+		<field name="name">Full Page Payment Voucher</field>
+		<field name="default" eval="True" />
+		<field name="format">A4</field>
+		<field name="page_height">0</field>
+		<field name="page_width">0</field>
+		<field name="margin_top">40</field>
+		<field name="margin_bottom">20</field>
+		<field name="margin_left">10</field>
+		<field name="margin_right">10</field>
+		<field name="header_line" eval="False" />
+		<field name="orientation">Portrait</field>
+		<field name="header_spacing">50</field>
+		<field name="dpi">80</field>
+	</record>
+
+	<report id="full_page_payment_report_action"
+		string="Full Page Payment Voucher"
+		model="account.payment"	report_type="qweb-pdf"
+		file="print_voucher_half_full_page.full_page_payment_report"
+		name="print_voucher_half_full_page.full_page_payment_report"
+		paperformat ="full_page_payment_report_paperformat"
+	/>
+
+</odoo>

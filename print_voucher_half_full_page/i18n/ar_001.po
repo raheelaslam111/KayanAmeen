@@ -1,0 +1,120 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* print_voucher_half_full_page
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e-20200921\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-13 23:24+0000\n"
+"PO-Revision-Date: 2021-02-13 23:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid ""
+"<br/>\n"
+"\t\t\t\t\t\t\t<strong style=\"border-top: 1.5px dashed #000;\">   Accountant   </strong>"
+msgstr "المحاسب"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid ""
+"<strong style=\"font-weight: bold; font-size: 22px;\"> Receipt No. : "
+"</strong>"
+msgstr "رقم الايصال"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid ""
+"<strong style=\"font-weight: bold; font-size: 22px;\"> Voucher No. : "
+"</strong>"
+msgstr "رقم الايصال"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid ""
+"<strong>  </strong><br/>\n"
+"\t\t\t\t\t\t\t<strong style=\"border-top: 1.5px dashed #000;\"> Receiver's Signature</strong>"
+msgstr "توقيع المستلم"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid ""
+"<strong>  </strong><br/>\n"
+"\t\t\t\t\t\t\t<strong style=\"border-top: 1.5px dashed #000;\">   Paid Manager</strong>"
+msgstr "المدير"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "<strong>Payment Amount :</strong>"
+msgstr "المبلغ المسدد"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "<strong>Payment Date :</strong>"
+msgstr "تاريخ السداد"
+
+#. module: print_voucher_half_full_page
+#: model:ir.actions.report,name:print_voucher_half_full_page.full_page_payment_report_action
+msgid "Full Page Payment Voucher"
+msgstr ""
+
+#. module: print_voucher_half_full_page
+#: model:ir.actions.report,name:print_voucher_half_full_page.half_page_payment_report_action
+msgid "Half Page Payment Voucher"
+msgstr ""
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Journal"
+msgstr "دفتر اليومية"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Lable"
+msgstr "السداد عن"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Paid to"
+msgstr "سددت الى"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Payment Receipt"
+msgstr "ايصال استلام"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Payment Voucher"
+msgstr "ايصال سداد"
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "Received from"
+msgstr "استلمت من "
+
+#. module: print_voucher_half_full_page
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_full_page_payment_voucher
+#: model_terms:ir.ui.view,arch_db:print_voucher_half_full_page.zero_half_page_payment_voucher
+msgid "The sum of"
+msgstr "المبلغ بالحروف"

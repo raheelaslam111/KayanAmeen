@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--************ Request Stage VIEWS  ************-->
+    <record id="request_stage_list_view_tree" model="ir.ui.view">
+        <field name="name">request.stage.list.tree</field>
+        <field name="model">request.stage.list</field>
+        <field name="arch" type="xml">
+            <tree string="Stage" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="request_stage_list_view_form" model="ir.ui.view">
+        <field name="name">request.stage.list.form</field>
+        <field name="model">request.stage.list</field>
+        <field name="arch" type="xml">
+            <form string="Stage">
+                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_request_stage_list" model="ir.actions.act_window">
+        <field name="name">Stage</field>
+        <field name="res_model">request.stage.list</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="request_stage_list_view_tree"/>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Stage.
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Stage"
+              id="request_stage_list_menu"
+              parent="menu_configuration"
+              action="action_request_stage_list"
+              sequence="70"/>
+</odoo>

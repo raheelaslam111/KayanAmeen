@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="endorsement_request_view_tree" model="ir.ui.view">
+        <field name="name">endorsement.request.tree</field>
+        <field name="model">endorsement.request</field>
+        <field name="arch" type="xml">
+            <tree string="Endorsement Request">
+                <field name="policy_type"/>
+                <field name="prev_policy"/>
+                <field name="partner_id"/>
+                <field name="insurance_company_id"/>
+                <field name="policy_no"/>
+                <field name="insurance_type_id"/>
+                <field name="insurance_sub_type_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'validate'" decoration-info="state not in ('validate', 'cancel', 'draft')" decoration-muted="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_endorsement_request_search">
+        <field name="name">endorsement.request.search</field>
+        <field name="model">endorsement.request</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="prev_policy"/>
+                <field name="insurance_type_id"/>
+                <field name="insurance_sub_type_id"/>
+                <field name="state"/>
+                <group name="group_group_by_end" expand="0" string="Group by...">
+                    <filter name="filter_group_by_partner_id"
+                            string="Customer" context="{'group_by': 'partner_id'}"/>
+                    <filter name="filter_group_by_insurance_type"
+                            string="Insurance Type" context="{'group_by': 'insurance_type_id'}"/>
+                    <filter name="filter_group_by_stage_sub_type"
+                            string="Insurance Sub Type" context="{'group_by': 'insurance_sub_type_id'}"/>
+                    <filter name="filter_group_by_state"
+                            string="State" context="{'group_by': 'state'}"/>
+                </group>
+                <searchpanel>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="insurance_type_id" string="Insurance Type"/>
+                    <field name="insurance_sub_type_id" string="Insurance Sub Type"/>
+                    <field name="state" string="State" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="endorsement_request_view_form" model="ir.ui.view">
+        <field name="name">endorsement.request.form</field>
+        <field name="model">endorsement.request</field>
+        <field name="arch" type="xml">
+            <form string="Endorsement Request">
+                <header>
+                    <field name="state" widget="statusbar" clickable="1" statusbar_visible="draft,review,sent_to_insurance,sent_to_customer,validate"/>
+                    <button name="action_create_endorsement_policy" states='sent_to_customer' type="object" string="Create Endorsement" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_endorsement_policy" type="object"
+                            class="oe_stat_button" icon="fa-tasks" attrs="{'invisible': [('endorsement_policy_id', '=', False)]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Endorsement Policy</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="document_no" class="oe_edit_only"/>
+                        <h1>
+                            <field name="document_no" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="policy_type" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="prev_policy" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="partner_id" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="insurance_company_id" attrs="{'readonly':[('state','=','validate')]}"/>
+                        </group>
+                         <group>
+                            <field name="policy_no" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="insurance_type_id" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="insurance_sub_type_id" attrs="{'readonly':[('state','=','validate')]}"/>
+                            <field name="medical_visibility_check" invisible="1"/>
+                            <field name="vehicle_visibility_check" invisible="1"/>
+                            <field name="endorsement_policy_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="endors_vehicle" string="Endorsement Vehicle" attrs="{'invisible': [('vehicle_visibility_check', '=', False)]}">
+                                <field name="endors_vehicle_ids" attrs="{'readonly':[('state','!=','draft')]}" domain="[('policy_id','=',prev_policy)]">
+                                    <tree editable="bottom">
+                                        <field name="policy_id" invisible="1"/>
+                                        <field name="vehicle_type_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="plate_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="plate_no_ar" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="model_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="chassis" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="capacity" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="driver_insurance" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="covering_maintenance" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="value" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="premium" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="vat" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="total"/>
+                                        <field name="endorsment_am"/>
+                                        <field name="endorsment_type"/>
+                                        <field name="owener_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="owner_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="custom_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="seq_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="user_id_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="user_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="building_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="additional_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="street" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="unit_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="po_box" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="zip_code" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="neighbour_head" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="mobile_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="exp_date_istemara_hijry" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_color" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_make_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_model_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="gcc_cover" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="natural_peril_cover" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="dob_owner" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="nationality" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        <page string="Health Endorsement" name="health_endors" attrs="{'invisible': [('medical_visibility_check', '=', False)]}">
+                                <field name="health_endors_ids" attrs="{'readonly':[('state','!=','draft')]}" domain="[('policy_id','=',prev_policy)]">
+                                    <tree editable="bottom">
+                                        <field name="policy_id" invisible="1"/>
+                                        <field name="member_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dependent_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="client_image" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="arabic_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="gender" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dob" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dob_hijra" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="age" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="member_type" optional="hide"/>
+                                        <field name="class_no" optional="hide"/>
+                                        <field name="occupation" optional="hide"/>
+                                        <field name="rate" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="vat" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="total"/>
+                                        <field name="endorsment_am"/>
+                                        <field name="endorsment_type"/>
+                                        <field name="risk_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="nationality" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="staff_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="mobile1" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="mobile2" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="dep_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="sponser_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="marital_status" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vip" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="as_vip" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_endorsement_request" model="ir.actions.act_window">
+        <field name="name">Endorsement Request</field>
+        <field name="res_model">endorsement.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_endorsement_request_search"/>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Endorsement Request.
+            </p>
+        </field>
+    </record>
+
+</odoo>

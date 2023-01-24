@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="client_basic_info_view_tree" model="ir.ui.view">
+        <field name="name">client.basic.info.tree</field>
+        <field name="model">client.basic.info</field>
+        <field name="arch" type="xml">
+            <tree string="Client INFO" create="0" edit="0" delete="0">
+                <field name="document_no"/>
+                <field name="customer_id"/>
+                <field name="member_id"/>
+                <field name="dependent_id"/>
+                <field name="name"/>
+                <field name="arabic_name"/>
+                <field name="gender"/>
+                <field name="dob"/>
+                <field name="dob_hijra" optional="1"/>
+                <field name="age" optional="1"/>
+                <field name="member_type" optional="1"/>
+                <field name="class_no" optional="1"/>
+                <field name="age_category" optional="1"/>
+                <field name="risk_no" optional="1"/>
+                <field name="nationality" optional="1"/>
+                <field name="staff_no" optional="1"/>
+                <field name="member_category" optional="1"/>
+                <field name="mobile1" optional="1"/>
+                <field name="mobile2" optional="1"/>
+                <field name="dep_no" optional="1"/>
+                <field name="sponser_id" optional="1"/>
+                <field name="occupation" optional="1"/>
+                <field name="marital_status" optional="1"/>
+<!--                <field name="elm_relation" optional="1"/>-->
+                <field name="vip" optional="1"/>
+                <field name="as_vip" optional="1"/>
+<!--                <field name="bank_id" optional="1"/>-->
+                <field name="branch_id" invisible="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'validate'" decoration-info="state not in ('validate', 'cancel', 'gather_info')" decoration-muted="state == 'gather_info'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_client_basic_info_search" model="ir.ui.view">
+        <field name="name">client.basic.info.search</field>
+        <field name="model">client.basic.info</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="document_no"/>
+                <group name="group_group_by_info" expand="0" string="Group by...">
+                    <filter name="filter_group_by_document_no"
+                            string="Document NO" context="{'group_by': 'document_no'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="client_basic_info_view_form" model="ir.ui.view">
+        <field name="name">client.basic.info.form</field>
+        <field name="model">client.basic.info</field>
+        <field name="arch" type="xml">
+            <form string="Client INFO" create="0" edit="0" delete="0">
+                <header>
+                </header>
+                <sheet>
+                    <field name="client_image" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                        <label for="arabic_name"/>
+                        <h1><field name="arabic_name" class="oe_inline"/></h1>
+                    </div>
+                    <group string="Member Details">
+                        <group>
+                            <field name="document_no"/>
+                            <field name="member_id"/>
+                            <field name="dependent_id"/>
+                            <field name="nationality" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="occupation"/>
+                            <field name="marital_status"/>
+                        </group>
+                         <group>
+
+                            <field name="gender"/>
+                            <field name="dob"/>
+                             <field name="dob_hijra"/>
+                            <field name="age"/>
+                              <field name="mobile1"/>
+                            <field name="mobile2"/>
+                        </group>
+                    </group>
+                    <group string="Insurance Details">
+                        <group>
+                            <field name="staff_no"/>
+                            <field name="member_type" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="member_category" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="dep_no"/>
+                            <field name="sponser_id"/>
+                            <field name="vip"/>
+                            <field name="as_vip"/>
+                        </group>
+                        <group>
+                            <field name="class_no" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="age_category" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="risk_no" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="branch_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_client_basic_info" model="ir.actions.act_window">
+        <field name="name">Client INFO</field>
+        <field name="res_model">client.basic.info</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_client_basic_info_search"/>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Client INFO.
+            </p>
+        </field>
+    </record>
+
+<!--    FOR CLIENT INFORMATION CREATION THROUGH SMART BUTTON-->
+    <record id="client_basic_info_smart_button_view_tree" model="ir.ui.view">
+        <field name="name">client.basic.info.tree</field>
+        <field name="model">client.basic.info</field>
+        <field name="arch" type="xml">
+            <tree string="Client INFO" create="1" edit="1" delete="1">
+                <field name="document_no"/>
+                <field name="customer_id"/>
+                <field name="member_id"/>
+                <field name="dependent_id"/>
+                <field name="name"/>
+                <field name="arabic_name"/>
+                <field name="gender"/>
+                <field name="dob"/>
+                <field name="activity_ids" string="Next Activity" widget="list_activity" optional="show"/>
+                <field name="dob_hijra" optional="1"/>
+                <field name="age" optional="1"/>
+                <field name="member_type" optional="1"/>
+                <field name="class_no" optional="1"/>
+                <field name="age_category" optional="1"/>
+                <field name="risk_no" optional="1"/>
+                <field name="nationality" optional="1"/>
+                <field name="staff_no" optional="1"/>
+                <field name="member_category" optional="1"/>
+                <field name="mobile1" optional="1"/>
+                <field name="mobile2" optional="1"/>
+                <field name="dep_no" optional="1"/>
+                <field name="sponser_id" optional="1"/>
+                <field name="occupation" optional="1"/>
+                <field name="marital_status" optional="1"/>
+<!--                <field name="elm_relation" optional="1"/>-->
+                <field name="vip" optional="1"/>
+                <field name="as_vip" optional="1"/>
+<!--                <field name="bank_id" optional="1"/>-->
+                <field name="branch_id" invisible="1"/>
+                <field name="state" widget="badge" decoration-success="state == 'validate'" decoration-info="state not in ('validate', 'cancel', 'gather_info')" decoration-muted="state == 'gather_info'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="client_basic_info_smart_button_view_form" model="ir.ui.view">
+        <field name="name">client.basic.info.form</field>
+        <field name="model">client.basic.info</field>
+        <field name="arch" type="xml">
+            <form string="Client INFO" create="1" edit="1" delete="1">
+                <header>
+                </header>
+                <sheet>
+                    <field name="client_image" widget="image" class="oe_avatar" options="{&quot;zoom&quot;: true}"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                        <label for="name"/>
+                        <h2><field name="arabic_name"/></h2>
+                    </div>
+                    <group string="Member Details">
+                        <group>
+                            <field name="document_no"/>
+                            <field name="member_id"/>
+                            <field name="dependent_id"/>
+                            <field name="nationality" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="occupation"/>
+                            <field name="marital_status"/>
+                        </group>
+                         <group>
+
+                            <field name="gender"/>
+                            <field name="dob"/>
+                             <field name="dob_hijra"/>
+                            <field name="age"/>
+                              <field name="mobile1"/>
+                            <field name="mobile2"/>
+                        </group>
+                    </group>
+                    <group string="Insurance Details">
+                        <group>
+                            <field name="staff_no"/>
+                            <field name="member_type" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="member_category" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="dep_no"/>
+                            <field name="sponser_id"/>
+                            <field name="vip"/>
+                            <field name="as_vip"/>
+                        </group>
+                        <group>
+                            <field name="class_no" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="age_category" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="risk_no" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="note"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="branch_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+</odoo>

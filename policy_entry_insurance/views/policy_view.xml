@@ -1,0 +1,903 @@
+<odoo>
+    <data>
+        <record id="view_policy_form" model="ir.ui.view">
+            <field name="name">insurance.policy.form</field>
+            <field name="model">insurance.policy</field>
+            <field name="arch" type="xml">
+                <form string="Policy Entry">
+                    <header>
+                        <field name="state" widget="statusbar" clickable="1"
+                               statusbar_visible="draft,submitted,posted"/>
+
+                                  <button name="action_submit"
+                            states="draft" string="Submit"
+                            type="object" class="oe_highlight"
+                          />
+
+                        <button name="action_post"
+                            states="submitted" string="Post"
+                            type="object" class="oe_highlight"
+                            />
+
+                        <button name="action_cancel"
+                            states="submitted,draft" string="Cancel"
+                            type="object" class="oe_highlight"
+                            />
+
+                        <button name="action_rest_to_draft"
+                            states="Cancel,submitted" string="Reset to Draft"
+                            type="object" class="oe_highlight"
+                            />
+
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_task" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Task</span>
+                                </div>
+                            </button>
+<!--                            <button name="action_open_policy_documents" type="object"-->
+<!--                                    class="oe_stat_button" icon="fa-star">-->
+<!--                                <div class="o_stat_info">-->
+<!--                                    <field name="total_document_number" class="o_stat_value"/>-->
+<!--                                    <span class="o_stat_text">Documents</span>-->
+<!--                                </div>-->
+<!--                            </button>-->
+                        </div>
+
+                        <group>
+                            <!--                              <div class="oe_title">-->
+                            <!--&lt;!&ndash;                            <label for="name"/>&ndash;&gt;-->
+                            <!--                            <h1><field name="policy_id"  no_label="1" class="oe_inline"/></h1>-->
+                            <!--                        </div>-->
+                            <group>
+                                <h3>Client Policy information</h3>
+                                <field name="policy_type" attrs="{'readonly':[('state','!=','draft')]}" required="1"/>
+
+                                <field name="partner_id" required="1" force_save="1"
+                                       attrs="{'readonly':['|',('state','!=','draft'),('policy_type','=','endors')]}"/>
+                                <!--                            <field name="manager_id"/>-->
+<!--                                <field name="branch_id" required="1" force_save="1"-->
+<!--                                       attrs="{'readonly':[('policy_type','=','endors')]}"/>-->
+                                <field name="start_date" attrs="{'readonly':[('state','!=','draft')]}" required="1"/>
+                                <field name="expiry_date" attrs="{'readonly':['|','|',('state','!=','draft'),('policy_type','=','endors'),('policy_type','=','endors')]}" force_save="1" required="1"/>
+                                <field name="issuance_date" required="1" attrs="{'readonly':['|',('state','!=','draft'),('policy_type','=','endors')]}" force_save="1"/>
+                                <field name="country_id" required="1" invisible="1"/>
+                                <field name="fed_state_id" string="Branch" required="1" attrs="{'readonly':['|',('state','!=','draft'),('policy_type','=','endors')]}"/>
+                                                                <field name="journal_id"/>
+                                <!--                                <field name="payment_term_id"/>-->
+                            </group>
+                            <group>
+                                <h3>Policy Detail</h3>
+                                <!--                                <field name="policy_id"/>-->
+                                <field name="policy_no" attrs="{'readonly':['|',('state','!=','draft'),('policy_type','=','endors')],'required':[('policy_type','=','policy')]}" force_save="1"/>
+                                <field name="endorsment_ref" attrs="{'invisible':[('policy_type','=','policy')],'required':[('policy_type','=','endors')]}"/>
+                                <field name="prev_policy" domain="[('policy_type','=','policy')]"
+                                       attrs="{'invisible':[('policy_type','=','policy')],'required':[('policy_type','=','endors')]}"/>
+                                <!--                            <field name="insurance_company_id"/>-->
+                                <!--                                <field name="business_class"/>-->
+                                <!--                                <field name="is_under_agreement"/>-->
+                                <!--                                <field name="agreement_file" attrs="{'invisible':[('is_under_agreement','=',False)]}"/>-->
+                                <!--                            <field name="is_extra_benfit"/>-->
+                               <field name="sales_employee" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="supervisor" attrs="{'readonly':[('state','!=','draft')]}"/>
+
+                            </group>
+                        </group>
+
+
+                        <notebook>
+                            <page name="policy_summery" string="Policy Summery">
+                                <group>
+                                    <!--                                    <group>-->
+                                    <!--                                        <field name="sum_insured"/>-->
+                                    <!--                                        &lt;!&ndash;                                        <field name="actual_sum_insured"/>&ndash;&gt;-->
+                                    <!--                                    </group>-->
+
+                                </group>
+                                <separator string="Difference" colspan="4"/>
+                                <table width="100%" style="border: 2px solid black;"
+                                       class="table table-bordered mt32">
+                                    <thead>
+                                        <tr style="background-color:#eaf289">
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Title</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Coverage</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Detail</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Difference</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Sum Insured</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="sum_insured" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" name="actual_sum_insured"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="difference_sum_insured" readonly="1" no_label="1"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Premium</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" name="basic_prem" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="premium_actual" readonly="1" no_label="1"/>
+
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="premium_difference" readonly="1" no_label="1"/>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                                <separator string="Policy Info" colspan="4"/>
+                                <table width="100%" style="border: 2px solid black;"
+                                       class="table table-bordered mt32">
+                                    <thead>
+                                        <tr style="background-color:#eaf289">
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Title</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Amount</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Vat</strong>
+                                            </th>
+                                            <th style="border: 2px solid black;width: 300px;">
+                                                <strong>Total</strong>
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Premium</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="basic_prem" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" attrs="{'readonly':[('state','!=','draft')]}" name="vat_premium"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="total_premium_after_vat_ii"  force_save="1"  readonly="1" no_label="1"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Premium(%)</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="premium_percent_am" no_label="1" readonly="1" force_save="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" name="premium_percent_vat" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="premium_percent_am_total_ii" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Issuing Fee</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="issuening_fee" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" attrs="{'readonly':[('state','!=','draft')]}" name="issuening_fee_percent"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="issuening_fee_total" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Additional Fee</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="additional_fee_am" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" name="additional_fee_am_vat" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="additional_fee_am_total" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Deduction</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="ded_fee_am" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field no_label="1" attrs="{'readonly':[('state','!=','draft')]}" name="ded_fee_am_vat"/>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="ded_fee_am_total" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr style="background-color:#d7eae8 ">
+                                            <td>
+                                                <strong>Total Policy</strong>
+                                            </td>
+                                            <td>
+                                                <field name="total_policy_am" force_save="1" no_label="1"/>
+                                            </td>
+                                            <td>
+                                                <field no_label="1" name="total_policy_vat" readonly="1"/>
+                                            </td>
+                                            <td>
+                                                <field name="total_policy_am_after_vat" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <separator string="Broker Commission" colspan="4"/>
+                                <table width="100%" style="border: 2px solid black;"
+                                       class="table table-bordered mt32">
+                                    <thead>
+                                        <tr style="background-color:#eaf289;text-align:center;">
+                                            <th width="100%" style="border: 2px solid black;">
+                                                <strong>Base</strong>
+                                            </th>
+                                            <th width="100%" style="border: 2px solid black;">
+                                                <strong>Amount</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Base Amount</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="base_amount" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field no_label="1" name="vat_premium"/>-->
+                                            <!--                                                    </td>-->
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field name="total_premium_after_vat" no_label="1"/>-->
+                                            <!--                                                    </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Approve Amount</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="approved_amount" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field no_label="1" name="vat_premium"/>-->
+                                            <!--                                                    </td>-->
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field name="total_premium_after_vat" no_label="1"/>-->
+                                            <!--                                                    </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Approved Commission Percentage</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="approve_percentage" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                            </td>
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field no_label="1" name="vat_premium"/>-->
+                                            <!--                                                    </td>-->
+                                            <!--                                                    <td style="border: 2px solid black;">-->
+                                            <!--                                                        <field name="total_premium_after_vat" no_label="1"/>-->
+                                            <!--                                                    </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Broker Commission</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="broker_commision" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td style="border: 2px solid black;">
+                                                <strong>Govt Fee</strong>
+                                            </td>
+                                            <td style="border: 2px solid black;">
+                                                <field name="govt_fee" readonly="1" force_save="1"  no_label="1"/>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+
+                                <!--                                        <field name="currency_id"/>-->
+                                <!--                                        <field name="sum_insured"/>-->
+
+                                <!--                                        <field name="basic_prem"/>-->
+                                <!--                                        <field name="net_premium"/>-->
+                                <!--                                        <field name="net_pr_percentage"/>-->
+                                <!--                                        <field name="basic_amount"/>-->
+                                <!--                                        <field name="basic_amount_percentage"/>-->
+                                <!--                                        <field name="gross_return"/>-->
+                                <!--                                    </group>-->
+                                <!--                                    <group>-->
+                                <!--                                        <field name="net_return_amount"/>-->
+                                <!--                                        <field name="issuening_fee"/>-->
+                                <!--                                        <field name="gross_premium"/>-->
+                                <!--                                        <field name="calculated_gross"/>-->
+                                <!--                                        <field name="premium_due"/>-->
+                                <!--                                        <field name="return_end_no"/>-->
+                                <!--
+                                                                      <field name="is_renewel_policy"/>-->
+                               <group>
+                                       <group>
+                                <field name="is_extra_benfit"/>
+                                       </group>
+                               </group>
+
+                                <!--                                <group string="Is extra Benefits">-->
+                                <!--                                    <field name="is_extra_benfit" nolabel="1"/>-->
+
+                                <!--                                </group>-->
+                            </page>
+                            <page string="Health Endorsement" name="health_endors">
+                                <field name="health_endors_ids" attrs="{'readonly':[('state','!=','draft')]}" domain="[('policy_id','=',prev_policy)]">
+
+                                    <tree editable="bottom">
+                                        <field name="policy_id" invisible="1"/>
+                                        <field name="member_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dependent_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="client_image" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="arabic_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="gender" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dob" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="dob_hijra" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="age" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <!--                                        <field name="member_type" readonly="1"/>-->
+                                        <!--                                        <field name="class_no" readonly="1"/>-->
+                                        <field name="rate" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="vat" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="total"/>
+
+                                        <field name="endorsment_am"/>
+                                        <field name="endorsment_type"/>
+                                        <!--                                        <field name="age_category" readonly="1" optional="hide"/>-->
+                                        <field name="risk_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="nationality" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="staff_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+<!--                                        <field name="member_category" optional="hide"/>-->
+                                        <field name="mobile1" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="mobile2" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="dep_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="sponser_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <!--                                        <field name="occupation" readonly="1" optional="hide"/>-->
+                                        <field name="marital_status" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+<!--                                        <field name="elm_relation" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>-->
+                                        <field name="vip" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="as_vip" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <!--                                        <field name="bank_id" readonly="1" optional="hide"/>-->
+                                        <!--                                        <field name="branch_id" readonly="1" optional="hide"/>-->
+
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="vehicle" string="Vehicle Detail">
+                                <field name="vehicle_detail" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree>
+                                        <field name="vehicle_type_id"/>
+                                        <field name="plate_no" placeholder="1234 ABC"/>
+                                        <field name="plate_no_ar"/>
+                                        <field name="chassis"/>
+                                        <field name="capacity"/>
+                                        <field name="driver_insurance"/>
+                                        <field name="covering_maintenance"/>
+                                        <field name="value"/>
+                                        <field name="premium"/>
+                                        <field name="vat"/>
+                                        <field name="total"/>
+                                        <field name="owener_name"/>
+                                        <field name="owner_id" optional="hide"/>
+                                        <field name="custom_id" optional="hide"/>
+                                        <field name="seq_no" optional="hide"/>
+                                        <field name="user_id_no" optional="hide"/>
+                                        <field name="user_name" optional="hide"/>
+                                        <field name="building_no" optional="hide"/>
+                                        <field name="additional_no" optional="hide"/>
+                                        <field name="street" optional="hide"/>
+                                        <field name="city" optional="hide"/>
+                                        <field name="unit_no" optional="hide"/>
+                                        <field name="po_box" optional="hide"/>
+                                        <field name="zip_code" optional="hide"/>
+                                        <field name="neighbour_head" optional="hide"/>
+                                        <field name="mobile_no" optional="hide"/>
+                                        <field name="exp_date_istemara_hijry" optional="hide"/>
+                                        <field name="vehicle_color" optional="hide"/>
+                                        <field name="vehicle_make_id" optional="hide"/>
+                                        <field name="vehicle_model_id"/>
+                                        <field name="country_id"/>
+                                        <field name="city" domain="[('country_id', '=', country_id)]"/>
+                                        <field name="model_no" optional="hide"/>
+                                        <field name="gcc_cover" optional="hide"/>
+                                        <field name="natural_peril_cover" optional="hide"/>
+                                        <field name="rate_percentage" optional="1"/>
+                                        <field name="deductible" optional="1"/>
+                                        <field name="minimum" optional="1"/>
+                                        <field name="personal_accedant" optional="1"/>
+                                        <field name="is_driver" optional="1"/>
+                                        <field name="driver_plus_passenger" optional="1"/>
+                                        <field name="dob_owner" optional="hide"/>
+                                        <field name="nationality" optional="hide"/>
+                                        <!--                                        <field name="premium" optional="hide"/>-->
+                                        <!--                                        <field name="policy_id"/>-->
+                                        <!--                                        <field name="currency_id"/>-->
+                                    </tree>
+                                    <form string="Vehicle Detail">
+<!--                                        Inherited and Mapped from insurance management-->
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="vehicle_coverage" string="Vehicle Coverage">
+                                <group>
+                                    <table width="100%" style="border: 2px solid black;"
+                                           class="table table-bordered mt32">
+                                        <thead>
+                                            <tr style="background-color:#89e3f2">
+                                                <th style="border: 2px solid black;width: 300px;">
+                                                    <strong>Title</strong>
+                                                </th>
+                                                <th style="border: 2px solid black;width: 300px;">
+                                                    <strong>Amount</strong>
+                                                </th>
+                                                <th style="border: 2px solid black;width: 300px;">
+                                                    <strong>Title</strong>
+                                                </th>
+                                                <th style="border: 2px solid black;width: 300px;">
+                                                    <strong>Amount</strong>
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody style="background-color:#e1e8cb">
+                                            <tr>
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Issuance Fee</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="issuance_fee_car" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Zero Depreciation</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="zero_dep" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Personal Accident For Driver</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="personal_accident_driver" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Towing Vehicle</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="towing_vehicle" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Personal Accident For Passengers</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="personal_accident_for_passenger" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Coverage for key loss or theft</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="key_loss_thef_coverage" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Car Hire</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="car_hire" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Glass Coverage</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="glass_coverage" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Geographical Extension</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="geo_ext" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+
+                                                <td style="border: 2px solid black;">
+                                                    <strong>Personal holdings in vehicle</strong>
+                                                </td>
+                                                <td style="border: 2px solid black;">
+                                                    <field name="personal_holding_in_vehicle" attrs="{'readonly':[('state','!=','draft')]}" no_label="1"/>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </group>
+                            </page>
+                            <page name="health" string="Health Detail">
+                                <field name="employee_ids" attrs="{'readonly':[('state','!=','draft')]}" mode="tree,form" nolabel="1">
+                                    <tree>
+                                        <field name="member_id"/>
+                                        <field name="dependent_id"/>
+                                        <field name="name"/>
+                                        <field name="arabic_name"/>
+                                        <field name="client_image"/>
+                                        <field name="arabic_name"/>
+                                        <field name="gender"/>
+                                        <field name="dob"/>
+                                        <field name="dob_hijra"/>
+                                        <field name="age"/>
+                                        <field name="rate"/>
+                                        <field name="vat"/>
+                                        <field name="total"/>
+                                        <field name="risk_no" optional="hide"/>
+                                        <field name="nationality" optional="hide"/>
+                                        <field name="staff_no" optional="hide"/>
+                                        <field name="mobile1" optional="hide"/>
+                                        <field name="mobile2" optional="hide"/>
+                                        <field name="dep_no" optional="hide"/>
+                                        <field name="sponser_id" optional="hide"/>
+                                        <field name="marital_status" optional="hide"/>
+                                        <field name="elm_relation" optional="hide"/>
+                                        <field name="vip" optional="hide"/>
+                                        <field name="as_vip" optional="hide"/>
+                                    </tree>
+                                    <form>
+<!--                                        Inherited and Mapped from insurance management-->
+                                    </form>
+                                </field>
+                                 <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_employee_am"/>
+                                    <field name="employee_tax" />
+                                    <field name="employe_total_after_tax"/>
+                                </group>
+                            </page>
+
+                            <page name="marine" string="Marine Detail">
+                                <field name="marine_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree>
+                                        <field name="cargo_description"/>
+                                        <field name="vessel_name"/>
+                                        <field name="loading_port"/>
+                                        <field name="credit_letter_no"/>
+                                        <field name="sailing_date"/>
+                                        <field name="parcel_no"/>
+                                        <field name="currency_id"/>
+                                        <field name="cardo_sum_insured"/>
+                                        <field name="premium"/>
+                                        <field name="vat"/>
+                                        <field name="total"/>
+                                        <field name="packing_type" optional="hide"/>
+                                        <field name="nationality" optional="hide"/>
+                                        <field name="discharge_port" optional="hide"/>
+                                        <field name="average_percentage" optional="hide"/>
+                                        <field name="package_no" optional="hide"/>
+                                        <field name="deductible" optional="hide"/>
+                                        <field name="good_type" optional="hide"/>
+                                        <field name="vessel_build_date" optional="hide"/>
+                                        <field name="single_policy" optional="hide"/>
+                                        <field name="cover_cluase" optional="hide"/>
+                                        <field name="clause_type" optional="hide"/>
+
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <group>
+                                                <field name="cargo_description"/>
+                                                <field name="vessel_name"/>
+                                                <field name="loading_port"/>
+                                                <field name="credit_letter_no"/>
+                                                <field name="sailing_date"/>
+                                                <field name="parcel_no"/>
+                                                <field name="cardo_sum_insured"/>
+                                                <field name="premium"/>
+                                                <field name="vat"/>
+                                                <field name="total"/>
+                                            </group>
+
+                                            <group>
+                                                <field name="currency_id"/>
+                                                <field name="packing_type"/>
+                                                <field name="nationality"/>
+                                                <field name="discharge_port"/>
+                                                <field name="average_percentage"/>
+                                                <field name="package_no"/>
+                                                <field name="deductible"/>
+                                            </group>
+                                            <group>
+                                                <field name="good_type"/>
+                                                <field name="vessel_build_date"/>
+                                                <field name="single_policy"/>
+                                                <field name="cover_cluase"/>
+                                                <field name="clause_type"/>
+                                            </group>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name="endors_vehicle" string="Endorsement Vehicle">
+                                <field name="endors_vehicle_ids" attrs="{'readonly':[('state','!=','draft')]}" domain="[('policy_id','=',prev_policy)]">
+                                    <tree editable="bottom">
+
+                                        <field name="policy_id" invisible="1"/>
+                                        <field name="vehicle_type_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="plate_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="plate_no_ar" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="model_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="chassis" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="capacity" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="driver_insurance" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="covering_maintenance" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="value" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="premium" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="vat" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="total"/>
+                                        <field name="endorsment_am"/>
+                                        <field name="endorsment_type"/>
+                                        <field name="owener_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}"/>
+                                        <field name="owner_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="custom_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="seq_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="user_id_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="user_name" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="building_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="additional_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="street" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+<!--                                        <field name="country_id " optional="hide"/>-->
+<!--                                        <field name="city" domain="[('country_id', '=', country_id)]" readonly="1" optional="hide"/>-->
+                                        <field name="unit_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="po_box" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="zip_code" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="neighbour_head" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="mobile_no" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="exp_date_istemara_hijry" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_color" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_make_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="vehicle_model_id" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="gcc_cover" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="natural_peril_cover" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="dob_owner" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                        <field name="nationality" attrs="{'readonly':['|',('endorsment_type','!=','amend'),('policy_id','!=',False)]}" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Extra Benefits" attrs="{'invisible':[('is_extra_benfit','=',False)]}">
+                                <field name="benefits_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree editable="bottom">
+                                        <field name="benefit_id"/>
+                                        <field name="description"/>
+                                        <field name="amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Installment">
+                                <field name="installment_ids">
+                                    <tree editable="bottom">
+                                        <!--                                        <field name="cash_mode"/>-->
+                                        <field name="installment_date"/>
+                                        <field name="no_of_installment"/>
+                                        <field name="type_installement"/>
+<!--                                        <field name="amount_paid"-->
+<!--                                               attrs="{'invisible':[('type_installement','=','fixed')]}"/>-->
+                                        <field name="percentage"
+                                               attrs="{'readonly':[('type_installement','=','fixed')]}"/>
+
+
+                                        <field name="fix_amount"
+                                              attrs="{'readonly':[('type_installement','=','percentage')]}"/>
+                                        <field name="activity_ids" widget="list_activity"/>
+
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_policy_am_after_vat" readonly="1"/>
+                                    <field name="total_instalment_am" force_save="1" readonly="1" string="Total Installment"/>
+                                    <field name="difference_instalment"/>
+                                </group>
+                            </page>
+                            <page string="Producer">
+                                <field name="producer_ids">
+                                    <tree editable="bottom">
+                                        <field name="employee_id"/>
+                                        <field name="amount"/>
+                                        <field name="percentage"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="invoice" string="Invoices Detail">
+                                <field name="move_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="partner_id"/>
+                                        <field name="invoice_payment_term_id"/>
+                                        <field name="invoice_date"/>
+                                        <field name="journal_id"/>
+                                        <field name="sales_person"/>
+                                        <field name="invoice_type"/>
+                                        <field name="date" optional="hide"
+                                               invisible="context.get('default_move_type') in ('out_invoice', 'out_refund', 'out_receipt')"
+                                               string="Accounting Date"/>
+                                        <field name="invoice_date_due" widget="remaining_days" optional="show"
+                                               attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>
+                                        <field name="invoice_origin" optional="hide" string="Source Document"/>
+                                        <field name="payment_reference" optional="hide"
+                                               invisible="context.get('default_move_type') in ('out_invoice', 'out_refund','out_receipt')"/>
+                                        <field name="ref" optional="hide"/>
+                                        <field name="invoice_user_id" optional="hide"
+                                               invisible="context.get('default_move_type') not in ('out_invoice', 'out_refund','out_receipt')"
+                                               string="Salesperson" widget="many2one_avatar_user"/>
+                                        <field name="activity_ids" widget="list_activity" optional="show"/>
+                                        <field name="company_id" groups="base.group_multi_company"
+                                               options="{'no_create': True}" optional="hide"/>
+                                        <field name="amount_untaxed_signed" string="Tax Excluded" sum="Total"
+                                               optional="show"/>
+                                        <field name="amount_tax_signed" string="Tax" sum="Total" optional="hide"/>
+                                        <field name="amount_total_signed" string="Total" sum="Total" decoration-bf="1"
+                                               optional="show"/>
+                                        <field name="amount_total_in_currency_signed" string="Total in Currency"
+                                               groups="base.group_multi_currency" optional="show"/>
+                                        <field name="amount_residual_signed" string="Amount Due" sum="Amount Due"
+                                               optional="hide"/>
+                                        <field name="currency_id" groups="base.group_multi_currency" optional="hide"/>
+                                        <field name="company_currency_id" invisible="1"/>
+                                        <field name="to_check" optional="hide" widget="boolean_toggle"/>
+                                        <field name="payment_state" widget="badge"
+                                               decoration-danger="payment_state == 'not_paid'"
+                                               decoration-warning="payment_state in ('partial', 'in_payment')"
+                                               decoration-success="payment_state in ('paid', 'reversed')"
+                                               attrs="{'invisible': [('payment_state', 'in', ('invoicing_legacy'))]}"
+                                               optional="show"/>
+                                        <field name="state" widget="badge" decoration-success="state == 'posted'"
+                                               decoration-info="state == 'draft'" optional="show"/>
+                                        <field name="move_type" invisible="context.get('default_move_type', True)"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="note"/>
+                            </page>
+
+
+                        </notebook>
+
+                        <!--                        <group>-->
+                        <!--&lt;!&ndash;                            <group>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                                    <field name="bussines_class_id" string="GO Business Class"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;                                </group>&ndash;&gt;-->
+
+                        <!--                        </group>-->
+
+                    </sheet>
+                    <div class="o_attachment_preview"/>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_policy_tree" model="ir.ui.view">
+            <field name="name">insurance.policy.tree</field>
+            <field name="model">insurance.policy</field>
+            <field name="arch" type="xml">
+                <tree string="Policy Entry">
+                    <field name="partner_id"/>
+                    <!--                    <field name="manager_id"/>-->
+                    <field name="country_id"/>
+                    <field name="fed_state_id"/>
+                    <field name="start_date"/>
+                    <field name="expiry_date"/>
+                    <field name="issuance_date"/>
+                    <field name="policy_id_i"/>
+                    <field name="insurance_company_id"/>
+                    <field name="business_class"/>
+                    <field name="state"/>
+                    <field name="policy_no" optional="hide"/>
+                    <field name="endorsment_ref" optional="hide"/>
+                    <field name="prev_policy" optional="hide"/>
+                    <field name="basic_prem" optional="hide"/>
+                    <field name="vat_premium" optional="hide"/>
+                    <field name="total_premium_after_vat" optional="hide"/>
+                    <field name="premium_percent_am" optional="hide"/>
+                    <field name="premium_percent_am" optional="hide"/>
+                    <field optional="hide" name="issuening_fee_percent"/>
+                    <field name="issuening_fee_total" optional="hide"/>
+                    <field name="additional_fee_am" optional="hide"/>
+                    <field name="additional_fee_am_vat" optional="hide"/>
+                    <field name="additional_fee_am_total" optional="hide"/>
+                    <field name="ded_fee_am" optional="hide"/>
+                    <field optional="hide" name="ded_fee_am_vat"/>
+
+                    <field name="ded_fee_am_total" optional="hide"/>
+                    <field name="total_policy_am" optional="hide"/>
+
+                    <field optional="hide" name="total_policy_vat"/>
+
+                    <field name="total_policy_am_after_vat" optional="hide"/>
+                     <field name="base_amount"  optional="hide"/>
+                     <field name="approved_amount" optional="hide"/>
+                     <field name="approve_percentage" optional="hide"/>
+                    <field name="broker_commision" optional="hide"/>
+
+                    <field name="sales_employee" optional="hide"/>
+                    <field name="supervisor" optional="hide"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="act_policy_entry" model="ir.actions.act_window">
+            <field name="name">Policy Entry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">insurance.policy</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_policy_tree"/>
+
+        </record>
+
+    </data>
+</odoo>

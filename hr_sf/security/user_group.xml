@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_hr_user_custom" model="res.groups">
+            <field name="name">Non Officer</field>
+            <field name="category_id" ref="base.module_category_human_resources_employees"/>
+            <field name="implied_ids" eval="[(6, 0, [ref('base.group_private_addresses'), ref('base.group_user')])]"/>
+            <field name="comment">The user will be able to approve document created by employees.</field>
+        </record>
+        <record id="module_bank_setting" model="ir.module.category">
+			<field name="name">Bank Account Setting</field>
+<!--			<field name="sequence">1</field>-->
+		</record>
+        <record model="res.groups" id="group_bank_admin">
+            <field name="name">Bank Admin</field>
+            <field name="category_id" ref="hr_sf.module_bank_setting"/>
+        </record>
+      
+
+    </data>
+</odoo>

@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+
+        <record id="founder_project_form_view" model="ir.ui.view">
+            <field name="name">founder_project_form_view</field>
+            <field name="model">founder.project</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="purchase_requests" type="object" class="oe_stat_button" icon="fa-pencil-square-o" string="Purchase Request"/>
+                            <button name="purchase_orders" type="object" class="oe_stat_button" icon="fa-pencil-square-o" string="Purchase Orders"/>
+                            <button name="purchase_bills" type="object" class="oe_stat_button" icon="fa-pencil-square-o" string="Purchase Bills"/>
+                        </div>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_ar"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="founder_project_action" model="ir.actions.act_window">
+            <field name="name">project</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">founder.project</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="project_menu_item" name="Project" parent="account.menu_finance_payables" action="founder_project_action" sequence="201" groups="founder_project.accounting_project"/>
+
+    </data>
+</odoo>

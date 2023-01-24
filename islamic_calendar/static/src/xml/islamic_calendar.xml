@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-extend="web.datepicker">
+        <t t-jquery="div.o_datepicker" t-operation="replace">
+            <div class="o_datepicker" aria-atomic="true" t-att-id="datepickerID" data-target-input="nearest">
+                <t t-if="widget.name == 'exp_date_istemara_hijry'">
+                    <input type="text" class="o_datepicker_input o_input datetimepicker-input oe_simple_date oe_datepicker_master" t-att-name="widget.name" t-att-placeholder="placeholder" t-attf-data-target="##{datepickerID}" style="display: none;" />
+                   <span class="o_datepicker_button" style="display: none;"/>
+                    <input t-att-name="widget.name" type="text" t-att-placeholder="placeholder" class="oe_hijri"/>
+                </t>
+                <t t-if="widget.name == 'dob_hijra'">
+                    <input type="text" class="o_datepicker_input o_input datetimepicker-input oe_simple_date oe_datepicker_master" t-att-name="widget.name" t-att-placeholder="placeholder" t-attf-data-target="##{datepickerID}" style="display: none;" />
+                   <span class="o_datepicker_button" style="display: none;"/>
+                    <input t-att-name="widget.name" type="text" t-att-placeholder="placeholder" class="oe_hijri"/>
+                </t>
+                <t t-if="widget.name != 'dob_hijra' and widget.name != 'exp_date_istemara_hijry'">
+                    <input type="text" class="o_datepicker_input o_input datetimepicker-input oe_simple_date oe_datepicker_master" t-att-name="widget.name" t-att-placeholder="placeholder" t-attf-data-target="##{datepickerID}" />
+                    <span class="o_datepicker_button"/>
+                    <input t-att-name="widget.name" type="text" t-att-placeholder="placeholder" class="oe_hijri" style="display: none;"/>
+                </t>
+            </div>
+        </t>
+    </t>
+</templates>

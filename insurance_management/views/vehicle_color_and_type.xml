@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--************ VEHICLE COLOR VIEWS  ************-->
+    <record id="vehicle_color_ins_view_tree" model="ir.ui.view">
+        <field name="name">vehicle.color.ins.tree</field>
+        <field name="model">vehicle.color.ins</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicle Color" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="vehicle_color_ins_view_form" model="ir.ui.view">
+        <field name="name">vehicle.color.ins.form</field>
+        <field name="model">vehicle.color.ins</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Color">
+                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_vehicle_color_ins" model="ir.actions.act_window">
+        <field name="name">Vehicle Color</field>
+        <field name="res_model">vehicle.color.ins</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="vehicle_color_ins_view_tree"/>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Vehicle Color.
+            </p>
+        </field>
+    </record>
+
+
+    <!--************ VEHICLE Type VIEWS  ************-->
+    <record id="vehicle_type_ins_view_tree" model="ir.ui.view">
+        <field name="name">vehicle.type.tree</field>
+        <field name="model">vehicle.type</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicle Type" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="vehicle_type_ins_view_form" model="ir.ui.view">
+        <field name="name">vehicle.type.form</field>
+        <field name="model">vehicle.type</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Type">
+                 <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" class="oe_inline"/></h1>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_vehicle_type_ins" model="ir.actions.act_window">
+        <field name="name">Vehicle Type</field>
+        <field name="res_model">vehicle.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="vehicle_type_ins_view_tree"/>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Vehicle Color.
+            </p>
+        </field>
+    </record>
+</odoo>
