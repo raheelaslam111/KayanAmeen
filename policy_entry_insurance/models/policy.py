@@ -94,17 +94,17 @@ class Policy(models.Model):
     total_document_number = fields.Integer(string='Total Documents', compute='get_total_documents')
     note = fields.Text("Notes")
 
-    # @api.model
-    # def name_search(self, name, args=None, operator='ilike', limit=100):
-    #     args = args or []
-    #     recs = self.browse()
-    #     if name:
-    #         recs = self.search(
-    #             [('policy_no', operator, name)] + args, limit=limit)
-    #     if not recs:
-    #         recs = self.search(
-    #             [('policy_no', operator, name)] + args, limit=limit)
-    #     return recs.name_get()
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        args = args or []
+        recs = self.browse()
+        if name:
+            recs = self.search(
+                [('policy_no', operator, name)] + args, limit=limit)
+        if not recs:
+            recs = self.search(
+                [('policy_no', operator, name)] + args, limit=limit)
+        return recs.name_get()
 
     def action_open_task(self):
         return {

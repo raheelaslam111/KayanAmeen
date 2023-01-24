@@ -234,7 +234,7 @@
                 <field name="create_policy" readonly="1"/>
                 <field name="vip"/>
                 <field name="insurance_quotation_id"/>
-                <field name="insurance_company_id"/>
+                <field name="insurance_company_id" invisible="1"/>
                 <field name="activity_ids" string="Next Activity" widget="list_activity" optional="show"/>
                 <field name="rate"/>
                 <field name="vat"/>
