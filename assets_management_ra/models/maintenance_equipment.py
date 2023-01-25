@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 import xlrd
 import logging
 from datetime import datetime, timedelta
-from hijri_converter import Hijri, Gregorian
 import requests
 from odoo.http import request
 from odoo import http
