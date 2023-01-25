@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="maintenance_equipment_view_form_inherit_ra" model="ir.ui.view">
+        <field name="name">maintenance.equipment.view.form.ra</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/group[1]/group[1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet/group[1]/group[1]" position="after">
+                <group>
+                    <field name="equipment_assign_to" widget="radio"/>
+                    <field name="employee_id" string="Employee" attrs="{'invisible': ['|', ('equipment_assign_to', 'in', ('department','branch')), ('equipment_assign_to', '=', False)]}"/>
+                    <field name="department_id" string="Department" attrs="{'invisible': ['|', ('equipment_assign_to', 'in', ('employee','branch')), ('equipment_assign_to', '=', False)]}"/>
+                    <field name="branch_id" string="Branch" attrs="{'invisible': ['|', ('equipment_assign_to', 'in', ('department','employee')), ('equipment_assign_to', '=', False)]}"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='maintenance_team_id']" position="before">
+                <field name="is_parent"/>
+                <field name="is_subsidiary"/>
+                <field name="parent_id" attrs="{'invisible': [('is_subsidiary', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="branch_id"/>
+            </xpath>
+            <xpath expr="//field[@name='serial_no']" position="replace">
+<!--                <div class="o_row">-->
+                    <field name="serial_no"/>
+                    <button string="Generate Serial No" class="btn btn-link" type="object" name="generate_random_serial_no" attrs="{'invisible': [('serial_no', '!=', False)]}"/>
+<!--                </div>-->
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Values">
+                    <group>
+                        <group>
+                            <field name="assets_value"/>
+                            <field name="acc_dep_value"/>
+                        </group>
+                        <group>
+                            <field name="net_amount"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+<!--    <record id="maintenance_equipment_view_form_inherit_attrs" model="ir.ui.view">-->
+<!--        <field name="name">maintenance.equipment.view.mmm.attrs</field>-->
+<!--        <field name="model">maintenance.equipment</field>-->
+<!--        <field name="inherit_id" ref="hr_maintenance.maintenance_equipment_view_form_inherit_hr"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <group string="MMMMMMMMMMMMMMMMMMMMMM"></group>-->
+<!--            </xpath>-->
+<!--&lt;!&ndash;            <xpath expr="//field[@name='employee_id']" position="attributes">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <attribute name="invisible">1</attribute>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="maintenance_request_view_form_inherit_ra" model="ir.ui.view">
+        <field name="name">maintenance.request.view.form.inherit.ra</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='maintenance_team_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Vendor Information">
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="vendor_reference"/>
+                            </group>
+                            <group>
+                                <field name="invoice_date"/>
+                                <field name="cost"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+
+
+
+
+    <record model="ir.actions.server" id="equipment_label_open_wizard">
+            <field name="name">Print Label</field>
+            <field name="model_id" ref="model_maintenance_equipment"/>
+            <field name="binding_model_id" ref="model_maintenance_equipment"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = {
+                'name' : 'Print Equipment Labels',
+                'type': 'ir.actions.act_window',
+                'context': {'default_equipment_ids': records.ids,},
+                'view_mode': 'form',
+                'res_model': 'equipment.label.layout',
+                'target':'new'
+                }
+            </field>
+        </record>
+
+
+    <record id="equipment_label_layout_form" model="ir.ui.view">
+        <field name="name">equipment.label.layout.form</field>
+        <field name="model">equipment.label.layout</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="equipment_ids" invisible="1"/>
+<!--                        <field name="product_tmpl_ids" invisible="1"/>-->
+<!--                        <field name="custom_quantity"/>-->
+                        <field name="print_format" widget="radio"/>
+                    </group>
+                    <group>
+                        <field name="extra_html" widget="html" attrs="{'invisible': [('print_format', 'not in', ('dymo', '2x7xprice'))]}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="process" string="Confirm" type="object" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="paperformat_label_sheet_equip" model="report.paperformat">
+            <field name="name">A4 Label Sheet</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="dpi">96</field>
+        </record>
+
+    <record id="report_equipment_label" model="ir.actions.report">
+            <field name="name">Equipment Label (PDF)</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">assets_management_ra.report_equipmentlabel</field>
+            <field name="report_file">assets_management_ra.report_producttemplatelabel</field>
+<!--            <field name="paperformat_id" ref="assets_management_ra.paperformat_label_sheet_equip"/>-->
+            <field name="print_report_name">'Equipment Labels - %s' % (object.name)</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    <template id="report_equipmentlabel">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-set="table_style" t-value="'border: 1px solid %s;' % (equipment_ids[0].company_id.primary_color or 'black')"/>
+                <t t-foreach="equipment_ids" t-as="equipment">
+                    <t t-call="assets_management_ra.report_simple_label4x7">
+                        <t t-set="equipment" t-value="equipment"/>
+                    </t>
+                </t>
+
+            </div>
+        </t>
+    </template>
+
+    <template id="report_simple_label4x7">
+            <t t-set="barcode_size" t-value="'width:33mm;height:8mm'"/>
+            <t t-set="table_style" t-value="'width:47mm;height:37.1mm;'"/>
+            <td t-att-style="make_invisible and 'visibility:hidden;'" >
+<!--                <div class="o_label_full" t-att-style="table_style">-->
+<!--                    <div class="o_label_name">-->
+<!--                        <strong t-esc="equipment.name"/>-->
+<!--                    </div>-->
+<!--                    <div class= "text-center o_label_small_barcode">-->
+<!--                        <span class="text-nowrap" t-esc="equipment.serial_no"/>-->
+<!--                        <t t-if="equipment.serial_no">-->
+<!--                            <div t-out="barcode" style="padding:0" t-options="{'widget': 'barcode', 'symbology': 'auto', 'img_style': barcode_size}"/>-->
+<!--                            <span class="text-center" t-out="barcode"/>-->
+<!--                        </t>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <t t-foreach="range(qty)" t-as="item">-->
+                            <t t-translation="off">
+                                <div style="display: inline-table; height: 10rem; width: 32%;">
+                                    <table class="table table-bordered" style="border: 2px solid black;">
+                                        <tr>
+                                            <th class="table-active text-left" style="height:4rem;">
+                                                <span t-esc="equipment.name"/>
+                                                <br/>
+                                            </th>
+                                        </tr>
+                                            <tr>
+                                                <td class="text-center align-middle">
+                                                    <t t-if="equipment.serial_no">
+                                                        <t t-set="barcode" t-value="equipment.serial_no"/>
+                                                        <div t-out="barcode" t-options="{'widget': 'barcode', 'symbology': 'auto', 'width': 100%, 'height': 4rem, 'img_style': 'width:100%;height:20%;'}"/>
+<!--                                                        <img t-att-src="'/report/barcode/Code128/'+equipment.serial_no" style="width:200px;height:50px"  alt="Barcode"/>-->
+<!--                                                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', equipment.serial_no, 600, 150)" style="width:100%;height:4rem" alt="Barcode"/>-->
+                                                        <span t-esc="equipment.serial_no"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span class="text-muted">No barcode available</span>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </t>
+<!--                        </t>-->
+            </td>
+        </template>
+
+
+</odoo>

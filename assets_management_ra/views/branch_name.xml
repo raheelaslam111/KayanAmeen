@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="branch_name_view_tree" model="ir.ui.view">
+        <field name="name">branch.name.tree</field>
+        <field name="model">branch.name</field>
+        <field name="arch" type="xml">
+            <tree string="Branch Name" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="branch_name_view_form" model="ir.ui.view">
+        <field name="name">branch.name.form</field>
+        <field name="model">branch.name</field>
+        <field name="arch" type="xml">
+            <form string="Branch Name">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                         <group>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_branch_name" model="ir.actions.act_window">
+        <field name="name">Branch Name</field>
+        <field name="res_model">branch.name</field>
+        <field name="view_mode">tree,form</field>
+         <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Branch Name.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="equipemnt_branch_name" name="Branch" parent="maintenance.menu_maintenance_configuration" action="action_branch_name" sequence="100"/>
+</odoo>
