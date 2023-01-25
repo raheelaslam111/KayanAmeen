@@ -412,13 +412,13 @@ odoo.define('islamic_calendar.islamic_calendar', function(require) {
 //                }).then(function (res) {
 //                this.displayNotification({ message: _t("The Line is Created!") });
 //            });
-        this._rpc({
-                    model: 'client.vehicle.info',
-                    method: 'write',
-                    args: [this.initialState.data.id, {
-                        'exp_date_istemara_hijry': datetime._i
-                    }],
-                })
+//        this._rpc({
+//                    model: 'client.vehicle.info',
+//                    method: 'write',
+//                    args: [this.initialState.data.id, {
+//                        'exp_date_istemara_hijry': datetime._i
+//                    }],
+//                })
 //        this.$el.find('.exp_date_istemara_hijry').val('bbbbb');
 //        this.initialState.data.exp_date_istemara_hijry = datetime._i;
 //        $("input[name=exp_date_istemara_hijry]").val(datetime._i);
