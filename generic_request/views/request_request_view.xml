@@ -32,12 +32,12 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                            <button name="action_open_task" type="object"
-                                class="oe_stat_button" icon="fa-tasks">
-                                <div class="o_stat_info">
-                                    <span class="o_stat_text">Task</span>
-                                </div>
-                            </button>
+<!--                            <button name="action_open_task" type="object"-->
+<!--                                class="oe_stat_button" icon="fa-tasks">-->
+<!--                                <div class="o_stat_info">-->
+<!--                                    <span class="o_stat_text">Task</span>-->
+<!--                                </div>-->
+<!--                            </button>-->
 <!--                        <button name="action_open_claim_documents" type="object"-->
 <!--                            class="oe_stat_button" icon="fa-star">-->
 <!--                            <div class="o_stat_info">-->
@@ -112,7 +112,7 @@
                                context="{'default_model': 'request.request'}"/>
                         </group>
                         <group>
-                            <field name="stage_list_id" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"/>
+<!--                            <field name="stage_list_id" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"/>-->
                         </group>
                     </group>
                     <group name="request_head_info" class="request-head-info" invisible="1">
@@ -209,11 +209,11 @@
                     </group>
                     <group string="Operation Dates">
                         <group>
-                            <field name="scheduled_date"/>
+<!--                            <field name="scheduled_date"/>-->
+                            <field name="date_created"/>
                             <field name="deadline_date" attrs="{'readonly': [('can_change_deadline', '=', False)]}"/>
                         </group>
                         <group>
-                            <field name="date_created"/>
                             <field name="notification_date"/>
                         </group>
                         <group string="Customer">
